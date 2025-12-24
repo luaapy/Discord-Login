@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: url('https://raw.githubusercontent.com/luaapy/Discord-Login/main/media/backround.png') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .header {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .logo-top {
+            height: 36px;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #313338;
+            padding: 32px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+            width: 100%;
+            max-width: 784px;
+            display: flex;
+            gap: 32px;
+        }
+
+        .left-section {
+            flex: 1;
+        }
+
+        .right-section {
+            width: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .title {
+            color: #f2f3f5;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #b5bac1;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #b5bac1;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        label .required {
+            color: #f23f42;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            background: #1e1f22;
+            border: 1px solid #1e1f22;
+            border-radius: 3px;
+            color: #dbdee1;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #00a8fc;
+        }
+
+        input::placeholder {
+            color: #4e5058;
+        }
+
+        .forgot-password {
+            display: block;
+            color: #00a8fc;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 4px;
+            transition: text-decoration 0.2s;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #5865f2;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+
+        .login-btn:hover {
+            background: #4752c4;
+        }
+
+        .login-btn:active {
+            background: #3c45a5;
+        }
+
+        .register-link {
+            color: #949ba4;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        .register-link a {
+            color: #00a8fc;
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-code {
+            width: 176px;
+            height: 176px;
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            padding: 8px;
+        }
+
+        .qr-code canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .qr-title {
+            color: #f2f3f5;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .qr-subtitle {
+            color: #b5bac1;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .qr-app-text {
+            color: #f2f3f5;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .qr-passkey {
+            color: #00a8fc;
+            font-size: 14px;
+            text-decoration: none;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .qr-passkey:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #f23f42;
+            color: #fff;
+            padding: 12px;
+            border-radius: 3px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            body {
+                background: #313338;
+            }
+
+            .header {
+                padding: 20px;
+                justify-content: center;
+            }
+
+            .logo-top {
+                height: 28px;
+            }
+
+            .container {
+                max-width: 480px;
+                padding: 32px 16px;
+            }
+
+            .right-section {
+                display: none;
+            }
+
+            .left-section {
+                width: 100%;
+            }
+
+            .title {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+            }
+
+            .header {
+                padding: 20px 16px;
+            }
+
+            .container {
+                border-radius: 0;
+                box-shadow: none;
+                min-height: calc(100vh - 76px);
+                padding: 24px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://raw.githubusercontent.com/luaapy/Discord-Login/main/media/logo_discord.png" alt="Discord Logo" class="logo-top">
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="left-section">
+                <h1 class="title">Welcome back!</h1>
+                <p class="subtitle">We're so excited to see you again!</p>
+
+                <div class="error-message" id="errorMessage"></div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email or Phone Number <span class="required">*</span></label>
+                        <input type="text" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password <span class="required">*</span></label>
+                        <input type="password" id="password" name="password" required>
+                        <a href="#" class="forgot-password">Forgot your password?</a>
+                    </div>
+
+                    <button type="submit" class="login-btn">Log In</button>
+
+                    <div class="register-link">
+                        Need an account? <a href="#">Register</a>
+                    </div>
+                </form>
+            </div>
+
+            <div class="right-section">
+                <div class="qr-section">
+                    <div class="qr-code">
+                        <canvas id="qrCanvas"></canvas>
+                    </div>
+                    <h2 class="qr-title">Log in with QR Code</h2>
+                    <p class="qr-subtitle">Scan this with the <span class="qr-app-text">Discord mobile app</span> to log in instantly.</p>
+                    <a href="#" class="qr-passkey">Or, sign in with passkey</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate corrupted/random QR code
+        function generateCorruptedQR() {
+            const canvas = document.getElementById('qrCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const size = 160;
+            canvas.width = size;
+            canvas.height = size;
+            
+            const moduleSize = 8;
+            const modules = size / moduleSize;
+            
+            // Fill white background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Generate random black/white modules
+            ctx.fillStyle = '#000000';
+            for (let i = 0; i < modules; i++) {
+                for (let j = 0; j < modules; j++) {
+                    if (Math.random() > 0.5) {
+                        ctx.fillRect(i * moduleSize, j * moduleSize, moduleSize, moduleSize);
+                    }
+                }
+            }
+            
+            // Add position markers (corners)
+            const markerSize = 7 * moduleSize;
+            function drawPositionMarker(x, y) {
+                // Outer square
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(x, y, markerSize, markerSize);
+                // White square
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(x + moduleSize, y + moduleSize, markerSize - 2 * moduleSize, markerSize - 2 * moduleSize);
+                // Inner black square
+                ctx.fillStyle = '#000000';
+                ctx.fillRect(x + 2 * moduleSize, y + 2 * moduleSize, 3 * moduleSize, 3 * moduleSize);
+            }
+            
+            drawPositionMarker(0, 0); // Top-left
+            drawPositionMarker(size - markerSize, 0); // Top-right
+            drawPositionMarker(0, size - markerSize); // Bottom-left
+            
+            // Add Discord logo in center
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const logoSize = 32;
+            
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, logoSize / 2, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.fillStyle = '#5865f2';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, logoSize / 2 - 2, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Simple Discord logo shape
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 20px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('D', centerX, centerY);
+        }
+
+        // Generate QR on load
+        generateCorruptedQR();
+
+        const form = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('errorMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showError('Email and password are required!');
+                return;
+            }
+
+            // Simulasi login
+            console.log('Login attempt:', { email, password });
+            
+            errorMsg.style.display = 'none';
+            alert('Login successful! (This is just a demo)');
+        });
+
+        function showError(message) {
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+            setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
