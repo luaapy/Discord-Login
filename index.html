@@ -380,28 +380,47 @@
             drawPositionMarker(size - markerSize, 0); // Top-right 
             drawPositionMarker(0, size - markerSize); // Bottom-left 
              
-            // Add Discord logo in center 
-            const centerX = size / 2; 
-            const centerY = size / 2; 
-            const logoSize = 32; 
-             
-            ctx.fillStyle = '#ffffff'; 
-            ctx.beginPath(); 
-            ctx.arc(centerX, centerY, logoSize / 2, 0, 2 * Math.PI); 
-            ctx.fill(); 
-             
-            ctx.fillStyle = '#5865f2'; 
-            ctx.beginPath(); 
-            ctx.arc(centerX, centerY, logoSize / 2 - 2, 0, 2 * Math.PI); 
-            ctx.fill(); 
-             
-            // Simple Discord logo shape 
-            ctx.fillStyle = '#ffffff'; 
-            ctx.font = 'bold 20px Arial'; 
-            ctx.textAlign = 'center'; 
-            ctx.textBaseline = 'middle'; 
-            ctx.fillText('D', centerX, centerY); 
-        } 
+            // Add Discord logo in center
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const logoSize = 40; // Increased size for better visibility
+            const logoUrl = 'https://raw.githubusercontent.com/luaapy/Discord-Login/main/media/logodc-centerqr.png';
+
+            const logo = new Image();
+            logo.crossOrigin = "Anonymous"; // Handle potential CORS issues
+            logo.src = logoUrl;
+
+            logo.onload = function() {
+                // Clear a circle in the center for the logo background
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, logoSize / 2 + 4, 0, 2 * Math.PI); // A bit larger for a white border
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                ctx.restore();
+                
+                // Draw the logo image
+                ctx.drawImage(logo, centerX - logoSize / 2, centerY - logoSize / 2, logoSize, logoSize);
+            };
+
+            logo.onerror = function() {
+                console.error("Failed to load the Discord logo for the QR code.");
+                // Fallback to the old simple logo shape if the image fails to load
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, logoSize / 2, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#5865f2';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, logoSize / 2 - 2, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('D', centerX, centerY);
+            };
+        }
  
         // Generate QR on load 
         generateCorruptedQR(); 
